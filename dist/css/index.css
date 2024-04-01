@@ -1,0 +1,38 @@
+.dark {
+  background-color: #222;
+  color: #fff;
+}
+
+.hero {
+  padding: 2rem 1rem;
+}
+
+.status-Todo {
+  color: rgb(255, 149, 0);
+  padding: 6px 10px;
+  border: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  display: flex;
+  width: fit-content;
+}
+
+.status-Progress {
+  color: rgb(0, 174, 255);
+  padding: 6px 10px;
+  border: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  display: flex;
+  width: fit-content;
+}
+
+.status-Completed {
+  color: rgb(3, 184, 7);
+  padding: 6px 10px;
+  border: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  display: flex;
+  width: fit-content;
+}
