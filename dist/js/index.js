@@ -32,6 +32,14 @@ function addTaskStatus() {
   location.reload();
 }
 
+function deleteTask(i) {
+  listTaskName.splice(i, 1);
+  listTaskStatus.splice(i, 1);
+  localStorage.setItem("task-name", JSON.stringify(listTaskName));
+  localStorage.setItem("task-status", JSON.stringify(listTaskStatus));
+  location.reload();
+}
+
 function displayItems() {
   let items = "";
   for (let i = 0; i < listTaskName.length && listTaskStatus.length; i++) {
@@ -40,15 +48,14 @@ function displayItems() {
     <th scope="row">${[i + 1]}</th>
     <td>${listTaskName[i]}</td>
     <td>
-      <span class="status-${listTaskStatus[i]} disabled">${
-      listTaskStatus[i]
-    }</span>
+      <span class="status-${listTaskStatus[i]}">${listTaskStatus[i]}</span>
     </td>
     <td>
       <button
         type="button"
         style="padding: 0.5rem"
         class="btn btn-outline-primary btn-sm d-flex"
+        id="edit-button"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -73,6 +80,7 @@ function displayItems() {
         type="button"
         style="padding: 0.5rem"
         class="btn btn-outline-danger btn-sm d-flex"
+        id="delete-button"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -94,6 +102,16 @@ function displayItems() {
   </tr>`;
   }
   document.querySelector(".table-body").innerHTML = items;
+  activeDeleteListener();
+}
+
+function activeDeleteListener() {
+  let deleteBtn = document.querySelectorAll("#delete-button");
+  deleteBtn.forEach((dB, i) => {
+    dB.addEventListener("click", () => {
+      deleteTask(i);
+    });
+  });
 }
 
 window.onload = () => {
