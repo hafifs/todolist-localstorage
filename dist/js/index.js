@@ -1,7 +1,10 @@
 const modalAdd = document.querySelector(".add-task");
-const taskName = document.getElementById("task-name");
-const taskStatus = document.getElementById("task-status");
+const inputTaskName = document.getElementById("task-name");
+const inputTaskStatus = document.getElementById("task-status");
 const buttonRemoveTask = document.getElementById("remove-task");
+const editSaveBtn = document.getElementById("update-button");
+const saveBtn = document.getElementById("submit-button");
+const newTaskBtn = document.getElementById("new-task");
 
 const listTaskName = localStorage.getItem("task-name")
   ? JSON.parse(localStorage.getItem("task-name"))
@@ -12,9 +15,21 @@ const listTaskStatus = localStorage.getItem("task-status")
 
 modalAdd.addEventListener("submit", (e) => {
   e.preventDefault();
-  addTaskName();
-  addTaskStatus();
-  taskName.value = "";
+  if (inputTaskName.value.length < 1) {
+    document.querySelector(".warning-input").style.display = "block";
+    setTimeout(() => {
+      document.querySelector(".warning-input").style.display = "none";
+    }, 2000);
+  } else if (inputTaskStatus.value.length < 1) {
+    document.querySelector(".warning-select").style.display = "block";
+    setTimeout(() => {
+      document.querySelector(".warning-select").style.display = "none";
+    }, 2000);
+  } else {
+    addTaskName();
+    addTaskStatus();
+    location.reload()
+  }
 });
 
 buttonRemoveTask.addEventListener("click", () => {
@@ -23,13 +38,13 @@ buttonRemoveTask.addEventListener("click", () => {
 });
 
 function addTaskName() {
-  listTaskName.push(taskName.value);
+  listTaskName.push(inputTaskName.value);
   localStorage.setItem("task-name", JSON.stringify(listTaskName));
 }
+
 function addTaskStatus() {
-  listTaskStatus.push(taskStatus.value);
+  listTaskStatus.push(inputTaskStatus.value);
   localStorage.setItem("task-status", JSON.stringify(listTaskStatus));
-  location.reload();
 }
 
 function deleteTask(i) {
@@ -38,6 +53,28 @@ function deleteTask(i) {
   localStorage.setItem("task-name", JSON.stringify(listTaskName));
   localStorage.setItem("task-status", JSON.stringify(listTaskStatus));
   location.reload();
+}
+
+function updateTask(i) {
+  editSaveBtn.addEventListener("click", () => {
+    if (inputTaskName.value.length < 1) {
+      document.querySelector(".warning-input").style.display = "block";
+      setTimeout(() => {
+        document.querySelector(".warning-input").style.display = "none";
+      }, 2000);
+    } else if (inputTaskStatus.value.length < 1) {
+      document.querySelector(".warning-select").style.display = "block";
+      setTimeout(() => {
+        document.querySelector(".warning-select").style.display = "none";
+      }, 2000);
+    } else {
+      listTaskName.splice([i], 1, inputTaskName.value);
+      listTaskStatus.splice([i], 1, inputTaskStatus.value);
+      localStorage.setItem("task-name", JSON.stringify(listTaskName));
+      localStorage.setItem("task-status", JSON.stringify(listTaskStatus));
+      location.reload();
+    }
+  });
 }
 
 function displayItems() {
@@ -56,6 +93,8 @@ function displayItems() {
         style="padding: 0.5rem"
         class="btn btn-outline-primary btn-sm d-flex"
         id="edit-button"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -103,6 +142,7 @@ function displayItems() {
   }
   document.querySelector(".table-body").innerHTML = items;
   activeDeleteListener();
+  activeUpdateListener();
 }
 
 function activeDeleteListener() {
@@ -113,6 +153,26 @@ function activeDeleteListener() {
     });
   });
 }
+
+function activeUpdateListener() {
+  const updateBtn = document.querySelectorAll("#edit-button");
+  updateBtn.forEach((uB, i) => {
+    uB.addEventListener("click", () => {
+      saveBtn.style.display = "none";
+      editSaveBtn.style.display = "block";
+      inputTaskName.value = listTaskName[i];
+      inputTaskStatus.value = listTaskStatus[i];
+      updateTask(i);
+    });
+  });
+}
+
+newTaskBtn.onclick = () => {
+  editSaveBtn.style.display = "none";
+  saveBtn.style.display = "block";
+  inputTaskName.value = "";
+  inputTaskStatus.value = "";
+};
 
 window.onload = () => {
   displayItems();

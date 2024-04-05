@@ -36,3 +36,15 @@
   display: flex;
   width: fit-content;
 }
+
+.warning-input {
+  color: red;
+  font-size: 12px;
+  display: none;
+}
+
+.warning-select {
+  color: red;
+  font-size: 12px;
+  display: none;
+}
